@@ -6,11 +6,13 @@ import com.anastasiiatkachuk.springframework.spring6restmvc.services.BeerService
 import com.anastasiiatkachuk.springframework.spring6restmvc.services.CustomerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,6 +23,23 @@ import java.util.UUID;
 public class CustomerController {
 
     private final CustomerService customerService;
+
+    @PutMapping("{customerId}")
+    public ResponseEntity updateById(@PathVariable UUID customerId, @RequestBody Customer customer){
+
+        customerService.updateById(customerId, customer);
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping
+    public ResponseEntity handlePost(@RequestBody Customer customer){
+        Customer customerSaved = customerService.saveNewCustomer(customer);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Location", "/api/v1/customer" + customerSaved.getId().toString());
+
+        return new ResponseEntity(httpHeaders, HttpStatus.CREATED);
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public List<Customer> listBeers(){
