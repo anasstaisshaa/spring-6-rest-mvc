@@ -4,6 +4,7 @@ import com.anastasiiatkachuk.springframework.spring6restmvc.model.Beer;
 import com.anastasiiatkachuk.springframework.spring6restmvc.services.BeerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,14 @@ import java.util.UUID;
 public class BeerController {
 
     private final BeerService beerService;
+
+    @PatchMapping("{beerId}")
+    public ResponseEntity updateBeer(@PathVariable UUID beerId, @RequestBody Beer beer){
+
+        beerService.patchBeerById(beerId, beer);
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 
     @DeleteMapping("{beerId}")
     public ResponseEntity deleteById(@PathVariable UUID beerId){
