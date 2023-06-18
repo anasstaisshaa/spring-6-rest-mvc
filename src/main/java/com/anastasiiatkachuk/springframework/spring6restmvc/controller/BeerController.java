@@ -3,6 +3,7 @@ package com.anastasiiatkachuk.springframework.spring6restmvc.controller;
 import com.anastasiiatkachuk.springframework.spring6restmvc.model.Beer;
 import com.anastasiiatkachuk.springframework.spring6restmvc.services.BeerService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpHeaders;
@@ -14,8 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-@AllArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/beer")
 public class BeerController {
@@ -38,7 +39,7 @@ public class BeerController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("{beerId")
+    @PutMapping("{beerId}")
     public ResponseEntity updateById(@PathVariable UUID beerId, @RequestBody Beer beer){
 
         beerService.updateBeerById(beerId, beer);
