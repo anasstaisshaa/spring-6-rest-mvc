@@ -47,7 +47,7 @@ public class CustumerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Customer> listCustomers(){
+    public List<Customer> getAllCustomers(){
         return new ArrayList<>(customerMap.values());
     }
 
@@ -74,7 +74,7 @@ public class CustumerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void updateById(UUID customerId, Customer customer) {
+    public void updateCustomerById(UUID customerId, Customer customer) {
         Customer exiting = customerMap.get(customerId);
         exiting.setCustomerName(customer.getCustomerName());
         exiting.setVersion(exiting.getVersion());
@@ -82,12 +82,12 @@ public class CustumerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deleteById(UUID customerId) {
+    public void deleteCustomerById(UUID customerId) {
         customerMap.remove(customerId);
     }
 
     @Override
-    public void patchBeerById(UUID customerId, Customer customer) {
+    public void patchCustomerById(UUID customerId, Customer customer) {
         Customer existing = customerMap.get(customerId);
 
         if (StringUtils.hasText(customer.getCustomerName())) {

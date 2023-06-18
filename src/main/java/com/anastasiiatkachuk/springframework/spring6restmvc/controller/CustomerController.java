@@ -5,6 +5,7 @@ import com.anastasiiatkachuk.springframework.spring6restmvc.model.Customer;
 import com.anastasiiatkachuk.springframework.spring6restmvc.services.BeerService;
 import com.anastasiiatkachuk.springframework.spring6restmvc.services.CustomerService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
@@ -16,57 +17,57 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.UUID;
 
-@AllArgsConstructor
-@Slf4j
-@RestController
 @RequestMapping("/api/v1/customer")
+@RequiredArgsConstructor
+@RestController
 public class CustomerController {
 
     private final CustomerService customerService;
 
     @PatchMapping("{customerId}")
-    public ResponseEntity updateCustomer(@PathVariable UUID customerId, @RequestBody Customer customer){
+    public ResponseEntity patchCustomerById(@PathVariable("customerId") UUID customerId,
+                                            @RequestBody Customer customer){
 
-        customerService.patchBeerById(customerId, customer);
+        customerService.patchCustomerById(customerId, customer);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("{customerId}")
-    public ResponseEntity deleteById(@PathVariable UUID customerId){
+    public ResponseEntity deleteCustomerById(@PathVariable("customerId") UUID customerId){
 
-        customerService.deleteById(customerId);
+        customerService.deleteCustomerById(customerId);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("{customerId}")
-    public ResponseEntity updateById(@PathVariable UUID customerId, @RequestBody Customer customer){
+    public ResponseEntity updateCustomerByID(@PathVariable("customerId") UUID customerId,
+                                             @RequestBody Customer customer){
 
-        customerService.updateById(customerId, customer);
+        customerService.updateCustomerById(customerId, customer);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping
+    @PostMapping
     public ResponseEntity handlePost(@RequestBody Customer customer){
-        Customer customerSaved = customerService.saveNewCustomer(customer);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Location", "/api/v1/customer" + customerSaved.getId().toString());
+        Customer savedCustomer = customerService.saveNewCustomer(customer);
 
-        return new ResponseEntity(httpHeaders, HttpStatus.CREATED);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/api/v1/customer/" + savedCustomer.getId().toString());
+
+        return new ResponseEntity(headers, HttpStatus.CREATED);
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<Customer> listBeers(){
-        return customerService.listCustomers();
+    public List<Customer> listAllCustomers(){
+        return customerService.getAllCustomers();
     }
 
     @RequestMapping(value = "{customerId}", method = RequestMethod.GET)
-    public Customer getBeerById(@PathVariable("customerId") UUID customerId){
-
-        log.debug("Get Beer by Id - in controller");
-
-        return customerService.getCustomerById(customerId);
+    public Customer getCustomerById(@PathVariable("customerId") UUID id){
+        return customerService.getCustomerById(id);
     }
+
 }
