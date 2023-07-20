@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Primary
 @RequiredArgsConstructor
 public class BeerServiceJPA implements BeerService {
-    private BeerRepository beerRepository;
+    private final BeerRepository beerRepository;
     private final BeerMapper beerMapper;
 
     @Override
